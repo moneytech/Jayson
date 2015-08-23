@@ -1,7 +1,4 @@
-#include <stdlib.h>
-#include <jayson/document.h>
-#include <stdio.h>
-#include <string.h>
+#include "jayson/document.h"
 
 json_t*
 json_new_object(){
@@ -96,6 +93,17 @@ void
 json_free(json_t* json){
     if(json_is_object(json)){
         json_object_t* jobj = json_to_object(json);
+
+        for(size_t i = 0; i < JSON_OBJECT_SIZE; i++){
+            if(jobj->table[i]){
+                json_object_entry_t* entry = jobj->table[i];
+                free(entry->key);
+                json_free(entry->value);
+                free(entry);
+            }
+        }
+
+        free(jobj->table);
         free(jobj);
     } else if(json_is_array(json)){
         json_array_t* jarray = json_to_array(json);

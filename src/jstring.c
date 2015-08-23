@@ -1,8 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdarg.h>
-#include <jayson/jstring.h>
+#include "jayson/jstring.h"
 
 jstring_t*
 jstring_create(){
@@ -13,9 +9,9 @@ jstring_create(){
         abort();
     }
 
-    ret->data = malloc(sizeof(uint8_t));
+    ret->data = malloc(sizeof(uint8_t) * 1024);
     ret->size = 0;
-    ret->asize = 1;
+    ret->asize = 1024;
     return ret;
 }
 
@@ -99,18 +95,18 @@ jstring_free(jstring_t * str){
 
 void
 jstring_grow(jstring_t* str, size_t size){
-    if(str->asize >= str->size){
+    if(str->asize > size){
         return;
     }
 
-    size_t nasize = str->asize + JSTRING_CHUNK_SIZE;
+    size_t nasize = str->asize + 1024;
     while(nasize < size){
-        nasize += JSTRING_CHUNK_SIZE;
+        nasize += 1024;
     }
 
     uint8_t* ret;
     if((ret = realloc(str->data, nasize)) == NULL){
-        fprintf(stderr, "[Jayson] Reallocation Failed.\n");
+        fprintf(stderr, "[Jayson] Reallocation Failed. (%lu)\n", nasize);
         abort();
     }
 

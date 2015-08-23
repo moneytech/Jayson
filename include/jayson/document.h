@@ -1,6 +1,8 @@
 #ifndef JAYSON_DOCUMENT_H
 #define JAYSON_DOCUMENT_H
 
+#include <stdlib.h>
+#include <string.h>
 #include "jstring.h"
 
 #ifdef __cplusplus
@@ -9,6 +11,14 @@ extern "C"{
 
 #ifndef JSON_OBJECT_SIZE
 #define JSON_OBJECT_SIZE 1024
+#endif
+
+#ifndef JSON_ARRAY_SIZE
+#define JSON_ARRAY_SIZE 16
+#endif
+
+#ifndef __attribute__
+#define __attribute__(x)
 #endif
 
 typedef enum{
@@ -38,13 +48,13 @@ typedef struct{
 #define json_is_number(json) (json_is_integer(json) || json_is_real(json))
 #define json_is_boolean(json) (json_is_true(json) || json_is_false(json))
 
-json_t* json_new_object();
-json_t* json_new_array();
-json_t* json_new_string(const char* value);
-json_t* json_new_integer(const int value);
-json_t* json_new_real(const double value);
-json_t* json_new_boolean(const int value);
-json_t* json_new_null();
+json_t* json_new_object() __attribute__((malloc));
+json_t* json_new_array() __attribute__((malloc));
+json_t* json_new_string(const char* value) __attribute__((malloc));
+json_t* json_new_integer(const int value) __attribute__((malloc));
+json_t* json_new_real(const double value) __attribute__((malloc));
+json_t* json_new_boolean(const int value) __attribute__((malloc));
+json_t* json_new_null() __attribute__((malloc));
 
 void json_free(json_t* json);
 
