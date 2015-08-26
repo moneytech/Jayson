@@ -112,8 +112,10 @@ void json_array_set(json_t* jarray, size_t index, json_t* value);
 void json_array_add(json_t* jarray, json_t* value);
 
 const char* json_string_value(json_t* jstr);
+jstring_t* json_value(json_t* j);
 
 int json_integer_value(json_t* jint);
+int json_boolean_value(json_t* jbool);
 
 double json_real_value(json_t* jreal);
 

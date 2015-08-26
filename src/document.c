@@ -259,9 +259,41 @@ json_string_value(json_t* jstr){
     return jstring_cstr(string->value);
 }
 
+jstring_t*
+json_value(json_t* j){
+    if(json_is_true(j)){
+        return jstring_wrap("true");
+    } else if(json_is_false(j)){
+        return jstring_wrap("false");
+    } else if(json_is_real(j)){
+        jstring_t* js = jstring_create();
+        jstring_printf(js, "%d", json_to_real(j)->value);
+        return js;
+    } else if(json_is_integer(j)){
+        jstring_t* js = jstring_create();
+        jstring_printf(js, "%d", json_to_integer(j)->value);
+        return js;
+    } else if(json_is_string(j)){
+        return json_to_string(j)->value;
+    } else{
+        return jstring_wrap("<not valid json_t>");
+    }
+}
+
 int
 json_integer_value(json_t* jint){
     return json_to_integer(jint)->value;
+}
+
+int
+json_boolean_value(json_t* jbool){
+    if(json_is_boolean(jbool)){
+        if(jbool == &J_TRUE){
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 double
